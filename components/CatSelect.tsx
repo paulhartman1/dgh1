@@ -21,10 +21,7 @@ const CatSelect = () => {
 
   const handleSelectionChange = (e) => {
     const selection = menuItems.map(mi => mi.key == e.currentKey)
-    console.log(selection);
-    
-    console.log(e);
-    
+
   }
 
   return (
