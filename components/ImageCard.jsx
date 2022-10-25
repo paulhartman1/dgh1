@@ -2,7 +2,7 @@ import { Card, Text } from "@nextui-org/react"
 
 
 export default function ImageCard({props}) {
-  console.log(props.image);
+
   return (
     <Card
 
