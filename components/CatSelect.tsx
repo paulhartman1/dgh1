@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Dropdown } from '@nextui-org/react';
 import React, { useState } from 'react';
 

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import type { NextPage } from 'next';
 import { FileUploader } from 'react-drag-drop-files';
 import { ChangeEvent, SetStateAction, useState } from 'react';
