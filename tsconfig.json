@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/ImageCard.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/ImageCard.jsx", "pages/api/s3.js"],
   "exclude": ["node_modules"]
 }
