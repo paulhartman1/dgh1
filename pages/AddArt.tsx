@@ -6,24 +6,40 @@ import { ChangeEvent, useState } from 'react';
 import ImageCard from '../components/ImageCard';
 import { FormElement, Grid, Input, Spacer, Checkbox } from '@nextui-org/react';
 import CatSelect from '../components/CatSelect';
-import { uuid as v4 } from 'uuidv4';
-import { PutObjectCommand, CreateBucketCommand } from '@aws-sdk/client-s3';
-import { s3Client } from '../libs/awsClient';
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
-import { log } from 'console';
 
 const AddArt: NextPage = () => {
-  const [file, setFile] = useState('favicon.ico');
+  const [image, setImage] = useState('favicon.ico');
   const [title, setTitle] = useState('Display title of image');
   const [desc, setDesc] = useState('A bunch of words describing something.');
+
   const fileTypes = ['JPG', 'JPEG', 'PNG', 'GIF', 'SVG'];
 
   const handleChange = async (file: Blob) => {
     const fr = new FileReader();
     fr.readAsDataURL(file);
     fr.onloadend = () => {
-      setFile(fr.result);
+      setImage(fr.result);
+      setTitle(file.name.substring(0,file.name.indexOf('.')))
     };
+
+    let { data } = await axios.post('/api/s3/upload', {
+      name: uuidv4() + file.name.substring(file.name.lastIndexOf('.')),
+      type: file.type,
+    });
+
+    await axios
+      .put(data.url, file, {
+        headers: {
+          'Content-type': file.type,
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleTitleChange = (e: ChangeEvent<FormElement>) => {
@@ -39,7 +55,7 @@ const AddArt: NextPage = () => {
       <Grid>
         <ImageCard
           props={{
-            image: file,
+            image: image,
             displayTitle: title,
             description: desc,
           }}
@@ -72,6 +88,7 @@ const AddArt: NextPage = () => {
           onChange={handleDescChange}
         />
         <Spacer y={1.5} />
+
         <Checkbox defaultSelected>Display in gallery</Checkbox>
       </Grid>
     </Grid.Container>
