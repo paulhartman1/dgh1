@@ -30,8 +30,14 @@ const AddArt: NextPage = () => {
   useEffect(() => {
     axios
       .get('/api/backend/download/categories')
-      .then((response) => setCats(response.data));
-  },[]);
+      .then((response) => setCats(response.data))
+      .catch(err => console.log(err))
+      .finally(() => {
+        if(cats.length == 0) {
+          setCats(['Coloring Book', 'Face Painting', 'Photos'])
+        }
+      });
+  });
   const handleDone = async () => {
     const imageId = uuidv4();
     const imgUp = axios
