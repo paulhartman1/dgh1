@@ -3,35 +3,34 @@
 import { Dropdown } from '@nextui-org/react';
 import React, { useState } from 'react';
 
-const CatSelect = () => {
-  const menuItems = [
-    { key: 'cp', name: 'Colored Pencil', withDivider: false, color: 'default' },
-    { key: 'cb', name: 'Coloring Book', withDivider: false, color: 'default' },
-    {
-      key: 'fp',
-      name: 'Facepainting    ',
+const CatSelect = ({ data }) => {
+  const [selectedKey, setSelectedKey] = useState(-1);
+  const menuItems = [];
+  for (let i = 0; i < data.length; i++) {
+   
+    menuItems.push({
+      key: data[i].id,
+      name: data[i].displayName,
       withDivider: false,
-      color: 'default',
-    },
-    { key: 'new', name: ' New Category', withDivider: true, color: 'error' },
-  ];
-
+      color: 'default'
+    });
+  }
   
-  const [selected, setSelected] = useState('Categories');
 
   const handleSelectionChange = (e) => {
-    const selection = menuItems.map(mi => mi.key == e.currentKey)
-
-  }
+    
+    setSelectedKey(parseInt(e.currentKey)-1);
+    
+  };
 
   return (
-    <Dropdown >
+    <Dropdown>
       <Dropdown.Button shadow css={{ w: '400px' }}>
-        {selected}
+        {menuItems[selectedKey]?.name || 'Select a Category'}
       </Dropdown.Button>
       <Dropdown.Menu
         disallowEmptySelection
-        selectionMode="multiple"
+        selectionMode="single"
         items={menuItems}
         onSelectionChange={handleSelectionChange}
       >
@@ -46,10 +45,7 @@ const CatSelect = () => {
         )}
       </Dropdown.Menu>
     </Dropdown>
-  )
-
-
-  
-}
+  );
+};
 
 export default CatSelect;
