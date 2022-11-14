@@ -28,13 +28,14 @@ const AddArt: NextPage = () => {
   const fileTypes = ['JPG', 'JPEG', 'PNG', 'GIF', 'SVG'];
 
   useEffect(() => {
+    console.log('using effect...')
     axios
       .get('/api/backend/download/categories')
       .then((response) => setCats(response.data))
       .catch(err => console.log(err))
       .finally(() => {
         if(cats.length == 0) {
-          setCats(['Coloring Book', 'Face Painting', 'Photos'])
+          setCats(['Coloring Book', 'Face Painting', 'Photo'])
         }
       });
   });
