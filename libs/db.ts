@@ -14,6 +14,7 @@ const db = mysql({
 })
 
 export default async function excuteQuery({ query, values }):Promsie {
+  console.log(process.env)
     try {
       const results = await db.query(query, values);
       await db.end();
