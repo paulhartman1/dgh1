@@ -10,6 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
+    console.log('trying...')
     const currentCats = await executeQuery({
       query: 'SELECT id, displayName FROM dgh.categories',
       values: [],

@@ -32,16 +32,16 @@ const AddArt: NextPage = () => {
     axios
       .get('/api/backend/download/categories')
       .then((response) => {
-        console.log(response);
+      
         setCats(response.data);
       })
       .catch((err) => console.log(err))
       .finally(() => {
         if (cats.length == 0) {
-          setCats(['Coloring Book', 'Face Painting', 'Photo']);
+          setCats(['ERROR']);
         }
       });
-  });
+  },[]);
   const handleDone = async () => {
     const imageId = uuidv4();
     const imgUp = axios
