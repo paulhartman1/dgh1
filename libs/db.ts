@@ -20,8 +20,8 @@ export default async function excuteQuery({ query, values }):Promsie {
       console.log(results);
       
       return results;
-    } catch (error) {
-        console.log(error)
-      return { error };
+    } catch (err) {
+        console.log(err)
+      return { error: err };
     }
   }
