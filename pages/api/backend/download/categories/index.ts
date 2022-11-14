@@ -21,6 +21,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (currentCats) res.status(200).send(currentCats);
     else res.send(500);
   } catch (error) {
+    console.log('there was an error')
     console.log(error);
   }
 };
