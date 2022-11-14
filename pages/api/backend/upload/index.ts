@@ -23,7 +23,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
    
 
    
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
   }
 };
