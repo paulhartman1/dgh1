@@ -32,11 +32,14 @@ const AddArt: NextPage = () => {
     axios
       .get('/api/backend/download/categories')
       .then((response) => {
-      
+        console.log(response);
+        
         setCats(response.data);
       })
       .catch((err) => console.log(err))
       .finally(() => {
+        console.log('finally');
+        
         if (cats.length == 0) {
           setCats(['ERROR']);
         }
