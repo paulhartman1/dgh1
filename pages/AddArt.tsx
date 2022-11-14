@@ -21,21 +21,24 @@ const AddArt: NextPage = () => {
   const [title, setTitle] = useState('Display title of image');
   const [desc, setDesc] = useState('A bunch of words describing something.');
   const [display, setDisplay] = useState(true);
-  const [cats, setCats] = useState([{id:1,displayName:'Coloring Bookz'}]);
+  const [cats, setCats] = useState([{ id: 1, displayName: 'Coloring Bookz' }]);
   const [file, setFile] = useState();
   const [disableBtnGroup, setDisbaleButtonGroup] = useState(true);
 
   const fileTypes = ['JPG', 'JPEG', 'PNG', 'GIF', 'SVG'];
 
   useEffect(() => {
-    console.log('using effect...')
+    console.log('using effect...');
     axios
       .get('/api/backend/download/categories')
-      .then((response) => setCats(response.data))
-      .catch(err => console.log(err))
+      .then((response) => {
+        console.log(response);
+        setCats(response.data);
+      })
+      .catch((err) => console.log(err))
       .finally(() => {
-        if(cats.length == 0) {
-          setCats(['Coloring Book', 'Face Painting', 'Photo'])
+        if (cats.length == 0) {
+          setCats(['Coloring Book', 'Face Painting', 'Photo']);
         }
       });
   });
