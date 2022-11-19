@@ -21,8 +21,8 @@ const AddArt: NextPage = () => {
   const [title, setTitle] = useState('Display title of image');
   const [desc, setDesc] = useState('A bunch of words describing something.');
   const [display, setDisplay] = useState(true);
-  const [cats, setCats] = useState([{ id: 1, displayName: 'Coloring Bookz' }]);
-  const [cat, setCat] = useState(null);
+  const [cats, setCats] = useState([{ id: 1, displayName: 'Coloring Book' }]);
+  const [cat, setCat] = useState({id:0,displayName:'Select a Category'});
   const [file, setFile] = useState();
   const [disableBtnGroup, setDisbaleButtonGroup] = useState(true);
 
@@ -32,9 +32,10 @@ const AddArt: NextPage = () => {
     axios
       .get('/api/backend/download/categories')
       .then((response) => {
+        console.log(response)
         setCats(response.data);
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.log('err',err))
       .finally(() => {        
         if (cats.length == 0) {
           setCats(['ERROR']);
@@ -90,15 +91,17 @@ const AddArt: NextPage = () => {
   };
 
 
-  const handleSelectionChange = (e) => {
-    setCat(parseInt(e.currentKey));
-  };
+ 
   const handleTitleChange = (e: ChangeEvent<FormElement>) => {
     setTitle(e.target.value);
   };
 
   const handleDescChange = (e: ChangeEvent<FormElement>) => {
     setDesc(e.target.value);
+  };
+
+  const handleSelectionChange = (e) => {
+    setCat(cats[parseInt(e.currentKey) - 1]);
   };
 
   return (
@@ -120,7 +123,7 @@ const AddArt: NextPage = () => {
             types={fileTypes}
           />
           <Spacer y={2.5} />
-          <CatSelect data={cats} handler={handleSelectionChange}/>
+          <CatSelect data={cats} handler={handleSelectionChange} selection={cat}/>
           <Spacer y={2.5} />
           <Input
             clearable

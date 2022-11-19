@@ -1,27 +1,24 @@
 // @ts-nocheck
 
 import { Dropdown } from '@nextui-org/react';
-import React, { useState } from 'react';
+import React, { useReducer, useState } from 'react';
 
-const CatSelect = ({ data, handler }) => {
-  const [selectedKey, setSelectedKey] = useState(-1);
+const CatSelect = ({ data, handler, selection }) => {
   const menuItems = [];
+
   for (let i = 0; i < data.length; i++) {
-   
     menuItems.push({
       key: data[i].id,
       name: data[i].displayName,
       withDivider: false,
-      color: 'default'
+      color: 'default',
     });
   }
-  
-
 
   return (
     <Dropdown>
       <Dropdown.Button shadow css={{ w: '400px' }}>
-        {menuItems[selectedKey]?.name || 'Select a Category'}
+        {selection?.displayName || 'Select a Category'}
       </Dropdown.Button>
       <Dropdown.Menu
         disallowEmptySelection
