@@ -22,24 +22,20 @@ const AddArt: NextPage = () => {
   const [desc, setDesc] = useState('A bunch of words describing something.');
   const [display, setDisplay] = useState(true);
   const [cats, setCats] = useState([{ id: 1, displayName: 'Coloring Bookz' }]);
+  const [cat, setCat] = useState(null);
   const [file, setFile] = useState();
   const [disableBtnGroup, setDisbaleButtonGroup] = useState(true);
 
   const fileTypes = ['JPG', 'JPEG', 'PNG', 'GIF', 'SVG'];
 
   useEffect(() => {
-    console.log('using effect...');
     axios
       .get('/api/backend/download/categories')
       .then((response) => {
-        console.log(response);
-        
         setCats(response.data);
       })
       .catch((err) => console.log(err))
-      .finally(() => {
-        console.log('finally');
-        
+      .finally(() => {        
         if (cats.length == 0) {
           setCats(['ERROR']);
         }
@@ -47,13 +43,15 @@ const AddArt: NextPage = () => {
   },[]);
   const handleDone = async () => {
     const imageId = uuidv4();
-    const imgUp = axios
+    const imgUp = await axios
       .post('/api/backend/upload', {
         id: imageId,
         displayName: title,
         description: desc,
         display,
-        cats,
+        cats:cat
+      }).then(res => {
+        console.log(res);
       })
       .catch((err) => console.log(err));
 
@@ -75,8 +73,8 @@ const AddArt: NextPage = () => {
 
     await Promise.all([dataUp, imgUp]).then((res) => {
       setImage('favicon.ico');
-      setTitle();
-      setDesc();
+      setTitle('');
+      setDesc('');
       setDisbaleButtonGroup(true);
     });
   };
@@ -91,6 +89,10 @@ const AddArt: NextPage = () => {
     setDisbaleButtonGroup(false);
   };
 
+
+  const handleSelectionChange = (e) => {
+    setCat(parseInt(e.currentKey));
+  };
   const handleTitleChange = (e: ChangeEvent<FormElement>) => {
     setTitle(e.target.value);
   };
@@ -118,7 +120,7 @@ const AddArt: NextPage = () => {
             types={fileTypes}
           />
           <Spacer y={2.5} />
-          <CatSelect data={cats} />
+          <CatSelect data={cats} handler={handleSelectionChange}/>
           <Spacer y={2.5} />
           <Input
             clearable

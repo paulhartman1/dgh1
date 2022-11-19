@@ -3,7 +3,7 @@
 import { Dropdown } from '@nextui-org/react';
 import React, { useState } from 'react';
 
-const CatSelect = ({ data }) => {
+const CatSelect = ({ data, handler }) => {
   const [selectedKey, setSelectedKey] = useState(-1);
   const menuItems = [];
   for (let i = 0; i < data.length; i++) {
@@ -17,11 +17,6 @@ const CatSelect = ({ data }) => {
   }
   
 
-  const handleSelectionChange = (e) => {
-    
-    setSelectedKey(parseInt(e.currentKey)-1);
-    
-  };
 
   return (
     <Dropdown>
@@ -32,7 +27,7 @@ const CatSelect = ({ data }) => {
         disallowEmptySelection
         selectionMode="single"
         items={menuItems}
-        onSelectionChange={handleSelectionChange}
+        onSelectionChange={handler}
       >
         {(item) => (
           <Dropdown.Item

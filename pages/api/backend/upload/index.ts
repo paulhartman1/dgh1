@@ -13,12 +13,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     let { id, displayName, display,description, cats } = req.body;
 
+    console.log(id,cats);
     const response = await executeQuery({
       query: `INSERT INTO dgh.images(id,displayName,display, description) values ("${id}","${displayName}",${display},"${description}")`,
       values: [],
     });
 
-    if(response) res.send(200)
+    const categoryResponse = await executeQuery({
+  
+      query: `INSERT INTO dgh.image_category(id_image,id_category) values ("${id}","${cats}")`,
+      values: [],
+    });
+
+    if(response && categoryResponse) res.send(200)
     else res.send(500);
    
 
