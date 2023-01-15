@@ -41,7 +41,7 @@ const AddArt: NextPage = () => {
           setCats([{id:0,displayName:'ERROR'}]);
         }
       });
-  });
+  },[]);
   const handleDone = async () => {
     const imageId = uuidv4();
     const imgUp = await axios
