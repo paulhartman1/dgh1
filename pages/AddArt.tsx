@@ -33,7 +33,7 @@ const AddArt: NextPage = () => {
       .get('/api/backend/download/categories')
       .then((response) => {
         console.log(response);
-       // setCats(response.data);
+        setCats(response.data);
       })
       .catch((err) => console.log('err',err))
       .finally(() => {        
