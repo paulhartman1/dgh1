@@ -5,7 +5,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import executeQuery from '../../../../../libs/db';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log('here');
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
@@ -13,14 +12,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     console.log('trying...')
     const currentCats = await executeQuery({
-      query: 'SELECT id, displayName FROM dgh.categories',
+      query: 'select * from dgh.categories',
       values: [],
     })
-     
+    // const currentCats = ['a','b'];
     
-    console.log('currentCats', currentCats);
-    if (currentCats) res.status(200).send(currentCats);
-    else res.send(500);
+
+   console.log('currentCATS', currentCats);
+   if (currentCats) res.status(200).send(['a','b']);
+   else res.send(500);
   } catch (error) {
     console.log('there was an error')
     console.log(error);

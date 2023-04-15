@@ -21,8 +21,10 @@ const AddArt: NextPage = () => {
   const [title, setTitle] = useState('Display title of image');
   const [desc, setDesc] = useState('A bunch of words describing something.');
   const [display, setDisplay] = useState(true);
-  const [cats, setCats] = useState([{ id: 1, displayName: 'Coloring Book' }]);
-  const [cat, setCat] = useState({id:0,displayName:'Select a Category'});
+  const [cats, setCats] = useState([
+    { id: 1, displayName: 'Colorinnlkjg Book' },
+  ]);
+  const [cat, setCat] = useState({ id: 0, displayName: 'Select a Category' });
   const [file, setFile] = useState();
   const [disableBtnGroup, setDisbaleButtonGroup] = useState(true);
 
@@ -32,35 +34,42 @@ const AddArt: NextPage = () => {
     axios
       .get('/api/backend/download/categories')
       .then((response) => {
-        console.log(response);
+        for (let i = 0; i < response.data.length; i++) {
+          response.data[i] = { id: i + 1, displayName: response.data[i] };
+        }
         setCats(response.data);
       })
-      .catch((err) => console.log('err',err))
-      .finally(() => {        
+      .catch((err) => console.log('err', err))
+      .finally(() => {
         if (cats.length == 0) {
-          setCats([{id:0,displayName:'ERROR'}]);
+          setCats([{ id: 0, displayName: 'ERROR' }]);
         }
       });
-  },[]);
+  }, []);
   const handleDone = async () => {
     const imageId = uuidv4();
-    const imgUp = await axios
-      .post('/api/backend/upload', {
-        id: imageId,
-        displayName: title,
-        description: desc,
-        display,
-        cats:cat
-      }).then(res => {
-        console.log(res);
+    console.log('imageId', imageId);
+    // const imgUp = await axios
+    //   .post('/api/backend/upload', {
+    //     id: imageId,
+    //     displayName: title,
+    //     description: desc,
+    //     display,
+    //     cats: cat,
+    //   })
+    //   .then((res) => {
+    //     console.log('jadklfjklads', res);
+    //   })
+    //   .catch((err) => console.log(err));
+
+    let { data } = await axios
+      .post('/api/s3/upload', {
+        name: imageId + file.name.substring(file.name.lastIndexOf('.')),
+        type: file.type,
       })
-      .catch((err) => console.log(err));
-
-    let { data } = await axios.post('/api/s3/upload', {
-      name: imageId + file.name.substring(file.name.lastIndexOf('.')),
-      type: file.type,
-    });
-
+      .catch((err) => {
+        console.error('fail', err);
+      });
     const dataUp = axios
       .put(data.url, file, {
         headers: {
@@ -69,15 +78,17 @@ const AddArt: NextPage = () => {
         },
       })
       .catch((err) => {
-        console.error(err);
+        console.error('fail', err);
       });
 
-    await Promise.all([dataUp, imgUp]).then((res) => {
-      setImage('favicon.ico');
-      setTitle('');
-      setDesc('');
-      setDisbaleButtonGroup(true);
-    });
+    await Promise.all([dataUp])
+      .then((res) => {
+        setImage('favicon.ico');
+        setTitle('');
+        setDesc('');
+        setDisbaleButtonGroup(true);
+      })
+      .catch((e) => console.error(e));
   };
   const handleChange = async (file: Blob) => {
     const fr = new FileReader();
@@ -90,8 +101,6 @@ const AddArt: NextPage = () => {
     setDisbaleButtonGroup(false);
   };
 
-
- 
   const handleTitleChange = (e: ChangeEvent<FormElement>) => {
     setTitle(e.target.value);
   };
@@ -123,7 +132,11 @@ const AddArt: NextPage = () => {
             types={fileTypes}
           />
           <Spacer y={2.5} />
-          <CatSelect data={cats} handler={handleSelectionChange} selection={cat}/>
+          <CatSelect
+            data={cats}
+            handler={handleSelectionChange}
+            selection={cat}
+          />
           <Spacer y={2.5} />
           <Input
             clearable
@@ -152,8 +165,8 @@ const AddArt: NextPage = () => {
       </Grid.Container>
       <Grid.Container justify="center" gap={2}>
         <Button.Group color="success" ghost disabled={disableBtnGroup}>
-          <Button onClick={handleDone}>+ Next</Button>
-          <Button onClick={handleDone}>Done</Button>
+          <Button onPress={handleDone}>+ Next</Button>
+          <Button onPress={handleDone}>Done</Button>
         </Button.Group>
       </Grid.Container>
     </>

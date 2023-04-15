@@ -1,28 +1,30 @@
 // @ts-nocheck
 
-import mysql from 'serverless-mysql'
+import mysql from 'mysql2';
 
-
-const db = mysql({
-    config: {
+export default async function excuteQuery(query): Promise {
+  const db = mysql.createConnection({
     host: process.env.MYSQL_HOST,
     port: process.env.MYSQL_PORT,
     database: process.env.MYSQL_DATABASE,
     user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD
-    }
-})
-
-export default async function excuteQuery({ query, values }):Promsie {
-  console.log('Process ENV: ',process.env)
-    try {
-      const results = await db.query(query, values);
-      await db.end();
-      console.log(results);
+    password: process.env.MYSQL_PASSWORD,
+    insecureAuth: true
+  });
+  try {
+    
+    db.connect();
+    db.query(query, function(error, results, fields) {
+     if(error) console.log('ERRORRRRRRRRRRRRR',error);
+     console.log('RESULT:::::::',results);
       
-      return results;
-    } catch (err) {
-        console.log(err)
-      return { error: err };
-    }
+    });
+    db.end();
+   // console.log(results);
+
+    return result;
+  } catch (err) {
+    console.log(err);
+    return { error: err };
   }
+}

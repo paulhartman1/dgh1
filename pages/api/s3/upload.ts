@@ -17,6 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     let { name, type } = req.body;
+    console.log(name,type);
     
     const fileParams = {
       Bucket: 'dgh-storage-6e8b5fbb153419-staging',
